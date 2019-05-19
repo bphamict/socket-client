@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -36,35 +37,63 @@ namespace Socket_Client
 
         private List<product> _ListProducts = null;
 
+        private Socket _socket;
+
+        Int32 port = 3000;
+        IPAddress localAddr = IPAddress.Parse("127.0.0.1");
+
+        // Buffer for reading data
+        byte[] bytes = new Byte[1024];
+        byte[] msg;
+        string data = null;
+        int i;
+
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             _ListProducts = new List<product>();
 
-            //Int32 port = 3000;
-            //TcpClient client = new TcpClient("127.0.0.1", port);
+            _socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            _socket.Connect(new IPEndPoint(localAddr, port));
 
             var screen = new GetNameWindow();
 
             if (screen.ShowDialog() == false) { this.Close(); }
-            else
+
+            // Send name to server
+            msg = Encoding.ASCII.GetBytes(screen.name);
+            _socket.Send(msg);
+
+            // Receive product data & add to list
+            while (true)
             {
-                // Send name to server
+                bool flag = false;
 
-                // Receive product data & add to list
-                addProductToList("1-abc-1000");
-                addProductToList("2-def-1000");
-                addProductToList("3-acc-1000");
-                addProductToList("4-qqq-1000");
+                if ((i = _socket.Receive(bytes)) != 0)
+                {
+                    data = Encoding.ASCII.GetString(bytes, 0, i);
 
-                Products_DataGrid.ItemsSource = _ListProducts;
-                Products_ComboBox.ItemsSource = _ListProducts;
+                    string[] words = data.Split('*');
 
-                // Wait until receive result of auction session
-                var screen1 = new GetInfoPaymentWindow();
-                screen1.ShowDialog();
+                    foreach (string s in words)
+                    {
+                        if (s == "EOF") { flag = true; break; }
+                        else if (s != "") { addProductToList(s); }
+                    }
+                }
 
-                //Good luck to you next time
+                if (flag) { break; }
             }
+
+            Products_DataGrid.ItemsSource = _ListProducts;
+            Products_ComboBox.ItemsSource = _ListProducts;
+
+            // Wait until receive result of auction session
+
+            // If client winner
+            var screen1 = new GetInfoPaymentWindow();
+            if (screen1.ShowDialog() == false) { MessageBox.Show("You not fill in form"); }
+
+            //Good luck to you next time
         }
 
         private void addProductToList(string s)
@@ -99,6 +128,9 @@ namespace Socket_Client
             else
             {
                 MessageBox.Show(index);
+                // Send product chosen to server
+                //msg = Encoding.ASCII.GetBytes();
+                //_socket.Send(msg);
             }
         }
     }

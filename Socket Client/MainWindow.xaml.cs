@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -27,7 +28,12 @@ namespace Socket_Client
         public MainWindow()
         {
             InitializeComponent();
+
+            Instance = this;
         }
+
+        // Instance to dispatcher invoke mainwindow
+        private MainWindow Instance { get; set; }
 
         private class product
         {
@@ -50,6 +56,9 @@ namespace Socket_Client
         byte[] msg;
         string data = null;
         int i;
+
+        // Flag to check sent
+        private bool flag = false;
 
         // Create countdown timer
         private DateTime time = new DateTime(1, 1, 1, 0, 1, 0);
@@ -127,14 +136,37 @@ namespace Socket_Client
             Products_DataGrid.ItemsSource = _ListProducts;
             Products_ComboBox.ItemsSource = _ListProducts;
 
+            new Thread(() => { CheckResult(); }).Start();
+        }
+
+        private void CheckResult()
+        {
             // Start countdown
             dispatcherTimer.Start();
 
+            while (true)
+            {
+                if (time.Second == 1 && time.Minute != 1)
+                {
+                    dispatcherTimer.Stop();
+                    break;
+                }
+            }
+
             // Check customer win or lose
+            while ((i = _socket.Receive(bytes)) != 0)
+            {
+                data = Encoding.ASCII.GetString(bytes, 0, i);
+                break;
+            };
+
             if (data == "WIN")
             {
-                var screen1 = new GetInfoPaymentWindow();
-                if (screen1.ShowDialog() == false) { MessageBox.Show("You not fill in form"); }
+                Instance.Dispatcher.Invoke(() =>
+                {
+                    var screen1 = new GetInfoPaymentWindow();
+                    if (screen1.ShowDialog() == false) { MessageBox.Show("You not fill in form"); }
+                });
             }
             else if (data == "LOSE")
             {
@@ -156,9 +188,12 @@ namespace Socket_Client
 
         private void Send_Button(object sender, RoutedEventArgs e)
         {
-            string index;
+            if (flag == false) flag = true;
+            else { MessageBox.Show("You has sent"); return; }
 
-            try { index = ((product)Products_ComboBox.SelectedItem).index; }
+            product p;
+
+            try { p = ((product)Products_ComboBox.SelectedItem); }
             catch { MessageBox.Show("Choose a product please"); return; }
 
             string price = Price_TextBox.Text;
@@ -171,6 +206,10 @@ namespace Socket_Client
             {
                 MessageBox.Show("Price is not correct");
             }
+            else if (int.Parse(price) < int.Parse(p.price))
+            {
+                MessageBox.Show("Price is less than origin price");
+            }
             else if (time.Second == 0)
             {
                 MessageBox.Show("Time was up");
@@ -178,8 +217,9 @@ namespace Socket_Client
             else
             {
                 // Send product chosen to server
-                msg = Encoding.ASCII.GetBytes(index + "-" + price + "-" + _name_customer);
+                msg = Encoding.ASCII.GetBytes(p.index + "-" + price + "-" + _name_customer);
                 _socket.Send(msg);
+                MessageBox.Show("Sent");
             }
         }
     }

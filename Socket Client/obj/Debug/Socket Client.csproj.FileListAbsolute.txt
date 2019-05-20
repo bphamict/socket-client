@@ -1,12 +1,13 @@
+C:\Users\dell\source\repos\Socket Client\Socket Client\bin\Debug\Socket Client.exe.config
+C:\Users\dell\source\repos\Socket Client\Socket Client\bin\Debug\Socket Client.exe
+C:\Users\dell\source\repos\Socket Client\Socket Client\bin\Debug\Socket Client.pdb
+C:\Users\dell\source\repos\Socket Client\Socket Client\obj\Debug\Socket Client.csprojAssemblyReference.cache
 C:\Users\dell\source\repos\Socket Client\Socket Client\obj\Debug\GetInfoPaymentWindow.g.cs
 C:\Users\dell\source\repos\Socket Client\Socket Client\obj\Debug\GetNameWindow.g.cs
 C:\Users\dell\source\repos\Socket Client\Socket Client\obj\Debug\MainWindow.g.cs
 C:\Users\dell\source\repos\Socket Client\Socket Client\obj\Debug\App.g.cs
 C:\Users\dell\source\repos\Socket Client\Socket Client\obj\Debug\Socket Client_MarkupCompile.cache
 C:\Users\dell\source\repos\Socket Client\Socket Client\obj\Debug\Socket Client_MarkupCompile.lref
-C:\Users\dell\source\repos\Socket Client\Socket Client\bin\Debug\Socket Client.exe.config
-C:\Users\dell\source\repos\Socket Client\Socket Client\bin\Debug\Socket Client.exe
-C:\Users\dell\source\repos\Socket Client\Socket Client\bin\Debug\Socket Client.pdb
 C:\Users\dell\source\repos\Socket Client\Socket Client\obj\Debug\GetInfoPaymentWindow.baml
 C:\Users\dell\source\repos\Socket Client\Socket Client\obj\Debug\GetNameWindow.baml
 C:\Users\dell\source\repos\Socket Client\Socket Client\obj\Debug\MainWindow.baml
@@ -16,4 +17,3 @@ C:\Users\dell\source\repos\Socket Client\Socket Client\obj\Debug\Socket Client.c
 C:\Users\dell\source\repos\Socket Client\Socket Client\obj\Debug\Socket Client.csproj.CoreCompileInputs.cache
 C:\Users\dell\source\repos\Socket Client\Socket Client\obj\Debug\Socket Client.exe
 C:\Users\dell\source\repos\Socket Client\Socket Client\obj\Debug\Socket Client.pdb
-C:\Users\dell\source\repos\Socket Client\Socket Client\obj\Debug\Socket Client.csprojAssemblyReference.cache

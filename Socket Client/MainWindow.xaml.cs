@@ -15,6 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace Socket_Client
 {
@@ -37,6 +38,8 @@ namespace Socket_Client
 
         private List<product> _ListProducts = null;
 
+        private string _name_customer;
+
         private Socket _socket;
 
         Int32 port = 3000;
@@ -48,8 +51,23 @@ namespace Socket_Client
         string data = null;
         int i;
 
+        // Create countdown timer
+        private DateTime time = new DateTime(1, 1, 1, 0, 1, 0);
+
+        // Call func interval = 1s
+        private void DispatcherTimer_Tick(object sender, EventArgs e)
+        {
+            CountDown.Text = time.ToString("mm:ss");
+            time = time.AddSeconds(-1);
+        }
+
+        DispatcherTimer dispatcherTimer = new DispatcherTimer();
+
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            dispatcherTimer.Tick += new EventHandler(DispatcherTimer_Tick);
+            dispatcherTimer.Interval = new TimeSpan(0, 0, 1);
+
             _ListProducts = new List<product>();
 
             _socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
@@ -59,20 +77,29 @@ namespace Socket_Client
 
             if (screen.ShowDialog() == false) { this.Close(); }
 
-            // Send name to server
-            msg = Encoding.ASCII.GetBytes(screen.name);
+            // Send customer name to server
+            _name_customer = screen.name;
+            msg = Encoding.ASCII.GetBytes(_name_customer);
             _socket.Send(msg);
 
             // Receive product data & add to list
             while (true)
             {
+                // flag to check if receive EOF products list
                 bool flag = false;
 
                 if ((i = _socket.Receive(bytes)) != 0)
                 {
                     data = Encoding.ASCII.GetString(bytes, 0, i);
 
-                    if (data == "NAME EXIST")
+                    // Check if receive full customer
+                    if (data == "FULL CUSTOMER")
+                    {
+                        MessageBox.Show("Full customer, come back later");
+                        return;
+                    }
+                    // Check if receive existed name
+                    else if (data == "NAME EXIST")
                     {
                         MessageBox.Show("Name exist");
 
@@ -100,13 +127,19 @@ namespace Socket_Client
             Products_DataGrid.ItemsSource = _ListProducts;
             Products_ComboBox.ItemsSource = _ListProducts;
 
-            // Wait until receive result of auction session
+            // Start countdown
+            dispatcherTimer.Start();
 
-            // If client winner
-            var screen1 = new GetInfoPaymentWindow();
-            if (screen1.ShowDialog() == false) { MessageBox.Show("You not fill in form"); }
-
-            //Good luck to you next time
+            // Check customer win or lose
+            if (data == "WIN")
+            {
+                var screen1 = new GetInfoPaymentWindow();
+                if (screen1.ShowDialog() == false) { MessageBox.Show("You not fill in form"); }
+            }
+            else if (data == "LOSE")
+            {
+                MessageBox.Show("You Lose! Good luck to you next time");
+            }
         }
 
         private void addProductToList(string s)
@@ -138,12 +171,15 @@ namespace Socket_Client
             {
                 MessageBox.Show("Price is not correct");
             }
+            else if (time.Second == 0)
+            {
+                MessageBox.Show("Time was up");
+            }
             else
             {
-                MessageBox.Show(index);
                 // Send product chosen to server
-                //msg = Encoding.ASCII.GetBytes();
-                //_socket.Send(msg);
+                msg = Encoding.ASCII.GetBytes(index + "-" + price + "-" + _name_customer);
+                _socket.Send(msg);
             }
         }
     }

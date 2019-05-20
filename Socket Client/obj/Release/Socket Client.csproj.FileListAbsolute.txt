@@ -1,0 +1,18 @@
+C:\Users\dell\source\repos\Socket Client\Socket Client\bin\Release\Socket Client.exe.config
+C:\Users\dell\source\repos\Socket Client\Socket Client\bin\Release\Socket Client.exe
+C:\Users\dell\source\repos\Socket Client\Socket Client\bin\Release\Socket Client.pdb
+C:\Users\dell\source\repos\Socket Client\Socket Client\obj\Release\GetInfoPaymentWindow.g.cs
+C:\Users\dell\source\repos\Socket Client\Socket Client\obj\Release\GetNameWindow.g.cs
+C:\Users\dell\source\repos\Socket Client\Socket Client\obj\Release\MainWindow.g.cs
+C:\Users\dell\source\repos\Socket Client\Socket Client\obj\Release\App.g.cs
+C:\Users\dell\source\repos\Socket Client\Socket Client\obj\Release\Socket Client_MarkupCompile.cache
+C:\Users\dell\source\repos\Socket Client\Socket Client\obj\Release\Socket Client_MarkupCompile.lref
+C:\Users\dell\source\repos\Socket Client\Socket Client\obj\Release\GetInfoPaymentWindow.baml
+C:\Users\dell\source\repos\Socket Client\Socket Client\obj\Release\GetNameWindow.baml
+C:\Users\dell\source\repos\Socket Client\Socket Client\obj\Release\MainWindow.baml
+C:\Users\dell\source\repos\Socket Client\Socket Client\obj\Release\Socket Client.g.resources
+C:\Users\dell\source\repos\Socket Client\Socket Client\obj\Release\Socket_Client.Properties.Resources.resources
+C:\Users\dell\source\repos\Socket Client\Socket Client\obj\Release\Socket Client.csproj.GenerateResource.cache
+C:\Users\dell\source\repos\Socket Client\Socket Client\obj\Release\Socket Client.csproj.CoreCompileInputs.cache
+C:\Users\dell\source\repos\Socket Client\Socket Client\obj\Release\Socket Client.exe
+C:\Users\dell\source\repos\Socket Client\Socket Client\obj\Release\Socket Client.pdb

@@ -72,6 +72,19 @@ namespace Socket_Client
                 {
                     data = Encoding.ASCII.GetString(bytes, 0, i);
 
+                    if (data == "NAME EXIST")
+                    {
+                        MessageBox.Show("Name exist");
+
+                        var screen2 = new GetNameWindow();
+                        if (screen2.ShowDialog() == false) { this.Close(); }
+
+                        msg = Encoding.ASCII.GetBytes(screen2.name);
+                        _socket.Send(msg);
+
+                        continue;
+                    }
+
                     string[] words = data.Split('*');
 
                     foreach (string s in words)
